@@ -1,0 +1,4 @@
+.development
+.env
+awxhelper-config.json
+bin

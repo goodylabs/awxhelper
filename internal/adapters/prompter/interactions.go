@@ -8,14 +8,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/goodylabs/awxhelper/internal/services/ports"
+	"github.com/goodylabs/awxhelper/internal/services/dto"
 	"github.com/manifoldco/promptui"
 	"golang.org/x/term"
 )
 
-func (p *prompter) runPrompter(options []ports.PrompterItem, label string) (string, error) {
-	p.clear()
-
+func (p *prompter) runPrompter(options []dto.PrompterItem, label string) (dto.PrompterItem, error) {
 	sort.Slice(options, func(i, j int) bool {
 		return options[i].Label < options[j].Label
 	})
@@ -44,24 +42,24 @@ func (p *prompter) runPrompter(options []ports.PrompterItem, label string) (stri
 			return strings.Contains(option.Label, input)
 		},
 		CursorPos: lastIndex,
-		Stdout:    noBellWriter{os.Stdout}, // tu filtrujemy BEL
+		Stdout:    noBellWriter{os.Stdout},
 	}
 
 	i, _, err := prompt.Run()
 	p.clear()
 	if err != nil {
-		return "", err
+		return options[0], err
 	}
 
 	p.lastIndexes[hashKey] = i
-	return options[i].Value, nil
+	return options[i], nil
 }
 
 func (p *prompter) clear() {
 	fmt.Print("\033[H\033[2J")
 }
 
-func (p *prompter) hashOptions(options []ports.PrompterItem) string {
+func (p *prompter) hashOptions(options []dto.PrompterItem) string {
 	labels := make([]string, len(options))
 	for i, opt := range options {
 		labels[i] = opt.Label

@@ -1,7 +1,9 @@
 package prompter
 
 import (
+	"github.com/goodylabs/awxhelper/internal/services/dto"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
+	"github.com/manifoldco/promptui"
 )
 
 type prompter struct {
@@ -14,26 +16,15 @@ func NewPrompter() ports.Prompter {
 	}
 }
 
-func (p *prompter) ChooseFromList(options []ports.PrompterItem, label string) (string, error) {
+func (p *prompter) ChooseFromList(options []dto.PrompterItem, label string) (dto.PrompterItem, error) {
 	p.clear()
 	return p.runPrompter(options, label)
 }
 
-// func (p *prompter) ChooseFromMap(options map[string]string, label string) (string, error) {
-// 	keys := make([]string, 0, len(options))
-// 	for k := range options {
-// 		keys = append(keys, k)
-// 	}
-// 	optionsPrompterItem := make([]ports.PrompterItem, len(keys))
-// 	for i, key := range keys {
-// 		optionsPrompterItem[i] = ports.PrompterItem{
-// 			Label: key,
-// 			Value: key,
-// 		}
-// 	}
-// 	resultKey, err := p.runPrompter(optionsPrompterItem, label)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return options[resultKey], nil
-// }
+func (p *prompter) PromptForString(message string) (string, error) {
+	prompt := promptui.Prompt{
+		Label:   message,
+		Pointer: promptui.PipeCursor,
+	}
+	return prompt.Run()
+}

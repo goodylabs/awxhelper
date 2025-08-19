@@ -9,7 +9,7 @@ mkdir -p bin
 
 ldflags="-X 'github.com/goodylabs/awxhelper/cmd.version=$VERSION'"
 
-GOOS=linux GOARCH=amd64 go build -ldflags "$ldflags" -o bin/awxhelper-linux-amd64
-GOOS=linux GOARCH=arm64 go build -ldflags "$ldflags" -o bin/awxhelper-linux-arm64
-GOOS=darwin GOARCH=amd64 go build -ldflags "$ldflags" -o bin/awxhelper-darwin-amd64
-GOOS=darwin GOARCH=arm64 go build -ldflags "$ldflags" -o bin/awxhelper-darwin-arm64
+GOOS=linux GOARCH=amd64 go build -ldflags "$ldflags" -o bin/linux-amd64
+GOOS=linux GOARCH=arm64 go build -ldflags "$ldflags" -o bin/linux-arm64
+GOOS=darwin GOARCH=amd64 go build -ldflags "$ldflags" -o bin/darwin-amd64
+GOOS=darwin GOARCH=arm64 go build -ldflags "$ldflags" -o bin/darwin-arm64

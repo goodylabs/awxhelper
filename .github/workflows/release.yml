@@ -26,9 +26,9 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           files: |
-            bin/tug-linux-amd64
-            bin/tug-linux-arm64
-            bin/tug-darwin-amd64
-            bin/tug-darwin-arm64
+            bin/linux-amd64
+            bin/linux-arm64
+            bin/darwin-amd64
+            bin/darwin-arm64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

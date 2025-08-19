@@ -39,4 +39,4 @@ chmod +x "$APP_BIN_PATH"
 echo "${APP} has been installed successfully!"
 
 completion_file="${HOME}/.$(basename "$SHELL")rc_$APP"
-$APP completion $(basename "$SHELL") > "$completion_file
+"${APP}" completion $(basename "$SHELL") > "${completion_file}"

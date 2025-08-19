@@ -20,7 +20,7 @@ func LoadConfig() {
 		rootDir := findProjectRoot()
 		AWXHELPER_DIR = path.Join(rootDir, ".development")
 	default:
-		AWXHELPER_DIR = path.Join(os.Getenv("PWD"), ".awxhelper")
+		AWXHELPER_DIR = path.Join(os.Getenv("HOME"), ".awxhelper")
 	}
 }
 

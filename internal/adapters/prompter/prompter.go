@@ -17,7 +17,6 @@ func NewPrompter() ports.Prompter {
 }
 
 func (p *prompter) ChooseFromList(options []dto.PrompterItem, label string) (dto.PrompterItem, error) {
-	p.clear()
 	return p.runPrompter(options, label)
 }
 

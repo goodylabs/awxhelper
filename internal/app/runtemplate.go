@@ -28,6 +28,9 @@ func (uc *RunTemplateUseCase) Execute(templatePrefix string) error {
 	}
 
 	template, err := uc.prompter.ChooseFromList(templates, "What do you want to do?")
+	if err != nil {
+		return nil
+	}
 
 	jobId, err := uc.awxconnector.LaunchJob(template.Value, map[string]any{})
 	if err != nil {

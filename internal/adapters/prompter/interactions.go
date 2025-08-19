@@ -46,7 +46,6 @@ func (p *prompter) runPrompter(options []dto.PrompterItem, label string) (dto.Pr
 	}
 
 	i, _, err := prompt.Run()
-	p.clear()
 	if err != nil {
 		return options[0], err
 	}

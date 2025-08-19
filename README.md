@@ -14,5 +14,5 @@ echo "source \"$completion_file\"" >> $rc_file
 source $rc_file
 
 # Download and install binary
-curl -s https://raw.githubusercontent.com/goodylabs/${APP}/refs/heads/main/scripts/download.sh | bash -s
+curl -s https://raw.githubusercontent.com/goodylabs/${APP}/refs/heads/main/scripts/download_script.sh | bash -s
 ```

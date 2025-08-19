@@ -1,36 +1,22 @@
 #!/bin/bash
 
-set -e
+latest_tag=$(git tag --sort=-v:refname | head -n1)
 
-BUMP=${1:-patch}
+if [ -z "$latest_tag" ]; then
+    new_tag="v0.0.1"
+else
+    IFS='.' read -r major minor patch <<<"${latest_tag#v}"
+    patch=$((patch + 1))
+    new_tag="v${major}.${minor}.${patch}"
+fi
 
-LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-echo "Last tag: $LAST_TAG"
+while git rev-parse "$new_tag" >/dev/null 2>&1; do
+    patch=$((patch + 1))
+    new_tag="v${major}.${minor}.${patch}"
+done
 
-VERSION=${LAST_TAG#v}
-IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+echo "Last tag: $latest_tag"
+echo "New tag: $new_tag"
 
-case $BUMP in
-  major)
-    ((MAJOR++))
-    MINOR=0
-    PATCH=0
-    ;;
-  minor)
-    ((MINOR++))
-    PATCH=0
-    ;;
-  patch)
-    ((PATCH++))
-    ;;
-  *)
-    echo "Usage: $0 [patch|minor|major]"
-    exit 1
-    ;;
-esac
-
-NEW_TAG="v$MAJOR.$MINOR.$PATCH"
-echo "New tag: $NEW_TAG"
-
-git tag "$NEW_TAG"
-git push origin "$NEW_TAG"
+git tag "$new_tag"
+git push origin "$new_tag"

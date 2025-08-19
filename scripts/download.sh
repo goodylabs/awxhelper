@@ -7,8 +7,8 @@ APP_DIR="${HOME}/.${APP}"
 APP_BIN_DIR="${APP_DIR}/bin"
 APP_BIN_PATH="${APP_BIN_DIR}/${APP}"
 
-mkdir $APP_DIR
-mkdir $APP_BIN_DIR
+mkdir -p $APP_DIR
+mkdir -p $APP_BIN_DIR
 
 os_type=$(uname -s | tr '[:upper:]' '[:lower:]')
 arch=$(uname -m)

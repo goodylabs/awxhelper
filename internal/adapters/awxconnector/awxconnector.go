@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/briandowns/spinner"
+	"github.com/fatih/color"
 	"github.com/goodylabs/awxhelper/internal/awxhelperconfig"
 	"github.com/goodylabs/awxhelper/internal/services/dto"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
@@ -107,18 +109,23 @@ func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int,
 	err = json.Unmarshal(respBody, &response)
 	return response.ID, err
 }
-
 func (a *awxconnector) JobProgress(jobId int) error {
 	url := fmt.Sprintf("/api/v2/jobs/%d/", jobId)
-
 	start := time.Now()
+
+	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
+	s.Suffix = fmt.Sprintf(" Job ID %d initializing...", jobId)
+	s.Start()
+	defer s.Stop()
 
 	for {
 		respBody, statusCode, err := a.doGet(url)
 		if err != nil {
+			s.Stop()
 			return fmt.Errorf("failed to get job status: %w", err)
 		}
 		if statusCode != 200 {
+			s.Stop()
 			return fmt.Errorf("unexpected status code %d when getting job status", statusCode)
 		}
 
@@ -128,19 +135,37 @@ func (a *awxconnector) JobProgress(jobId int) error {
 		}
 		err = json.Unmarshal(respBody, &job)
 		if err != nil {
+			s.Stop()
 			return fmt.Errorf("failed to unmarshal job status json: %w", err)
 		}
 
 		elapsed := time.Since(start).Round(time.Second)
 
-		fmt.Printf("Job ID %d running for %v, status: %s\n", jobId, elapsed, job.Status)
-
+		var statusColored string
 		switch job.Status {
+		case "running":
+			statusColored = color.BlueString(job.Status)
 		case "canceled", "failed":
-			fmt.Printf("Job ID %d failed or errored\n", jobId)
-			return nil
+			statusColored = color.RedString(job.Status)
+		case "pending":
+			statusColored = color.HiBlackString(job.Status)
 		case "successful":
-			fmt.Printf("Job ID %d completed successfully\n", jobId)
+			statusColored = color.GreenString(job.Status)
+		default:
+			statusColored = job.Status
+		}
+
+		detailedInfoUrl := fmt.Sprintf("%s/#/jobs/playbook/%d/output", a.baseURL, jobId)
+		s.Suffix = fmt.Sprintf(" Job ID %d running for %v, status: %s - more info: %s", jobId, elapsed, statusColored, detailedInfoUrl)
+
+		if job.Status == "canceled" || job.Status == "failed" {
+			s.Stop()
+			fmt.Printf("\nJob ID %d failed or errored\n", jobId)
+			return nil
+		}
+		if job.Status == "successful" {
+			s.Stop()
+			fmt.Printf("\nJob ID %d completed successfully\n", jobId)
 			return nil
 		}
 

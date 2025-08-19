@@ -13,7 +13,7 @@ import (
 
 var runbackupCmd = &cobra.Command{
 	Use:   "runbackup",
-	Short: "A brief description of your command",
+	Short: "Run specified backup job",
 	Run: func(cmd *cobra.Command, args []string) {
 		container := di.CreateContainer()
 		err := container.Invoke(func(us *app.RunTemplateUseCase) error {

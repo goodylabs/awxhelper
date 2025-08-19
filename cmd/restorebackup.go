@@ -13,7 +13,7 @@ import (
 
 var restorebackupCmd = &cobra.Command{
 	Use:   "restorebackup",
-	Short: "A brief description of your command",
+	Short: "Restore db from backup with specified job",
 	Run: func(cmd *cobra.Command, args []string) {
 		container := di.CreateContainer()
 		err := container.Invoke(func(us *app.RunTemplateUseCase) error {

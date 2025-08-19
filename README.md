@@ -2,11 +2,17 @@
 
 ```bash
 # Prerequisites
-line="export PATH=\"\$HOME/.${APP}/bin:\$PATH\""
+APP="awxhelper"
 rc_file="${HOME}/.$(basename "$SHELL")rc"
+
+line="export PATH=\"\$HOME/.${APP}/bin:\$PATH\""
 echo $line >> $rc_file
+
+touch "${HOME}/.$(basename "$SHELL")rc_${APP}"
+echo "source \"$completion_file\"" >> $rc_file
+
 source $rc_file
 
 # Download and install binary
-curl -s https://raw.githubusercontent.com/goodylabs/awxhelper/refs/heads/main/scripts/download.sh | bash -s
+curl -s https://raw.githubusercontent.com/goodylabs/${APP}/refs/heads/main/scripts/download.sh | bash -s
 ```

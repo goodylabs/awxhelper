@@ -11,13 +11,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var restorebackupCmd = &cobra.Command{
-	Use:   "restorebackup",
+var runbackupCmd = &cobra.Command{
+	Use:   "runbackup",
 	Short: "A brief description of your command",
 	Run: func(cmd *cobra.Command, args []string) {
 		container := di.CreateContainer()
 		err := container.Invoke(func(us *app.RunTemplateUseCase) error {
-			return us.Execute("restore_")
+			return us.Execute("backup_")
 		})
 		if err != nil {
 			fmt.Println(err)
@@ -26,5 +26,5 @@ var restorebackupCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(restorebackupCmd)
+	rootCmd.AddCommand(runbackupCmd)
 }

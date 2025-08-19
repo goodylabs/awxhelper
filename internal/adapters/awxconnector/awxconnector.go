@@ -11,6 +11,7 @@ import (
 	"github.com/goodylabs/awxhelper/internal/awxhelperconfig"
 	"github.com/goodylabs/awxhelper/internal/services/dto"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
+	"github.com/goodylabs/awxhelper/pkg/config"
 )
 
 type awxconnector struct {
@@ -89,7 +90,7 @@ func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int,
 	url := fmt.Sprintf("/api/v2/job_templates/%d/launch/", templateIdInt)
 
 	launchBody := map[string]any{
-		"inventory": 13,
+		"inventory": config.INVENTORY_ID,
 	}
 
 	respBody, statusCode, err := a.doPost(url, launchBody)
@@ -132,7 +133,6 @@ func (a *awxconnector) JobProgress(jobId int) error {
 
 		elapsed := time.Since(start).Round(time.Second)
 
-		fmt.Print("\033[H\033[2J")
 		fmt.Printf("Job ID %d running for %v, status: %s\n", jobId, elapsed, job.Status)
 
 		switch job.Status {

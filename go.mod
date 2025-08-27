@@ -9,7 +9,9 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/denouche/goawx v0.22.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
+	github.com/go-resty/resty/v2 v2.16.5 // indirect
 	github.com/golang/glog v1.2.5 // indirect
+	github.com/goodylabs/releaser v0.1.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
@@ -20,6 +22,7 @@ require (
 	github.com/spf13/cobra v1.9.1 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 	go.uber.org/dig v1.19.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/term v0.34.0 // indirect
 )

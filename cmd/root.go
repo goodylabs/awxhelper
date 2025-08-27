@@ -24,7 +24,15 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	err := rootCmd.Execute()
+	updated, err := config.GetReleaser().Run()
+	if err != nil {
+		fmt.Println("Error checking for updates:", err)
+	} else if updated {
+		fmt.Println("Application has been updated.")
+		os.Exit(0)
+	}
+
+	err = rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}

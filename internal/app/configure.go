@@ -1,7 +1,8 @@
 package app
 
 import (
-	"github.com/goodylabs/awxhelper/internal/awxhelperconfig"
+	"github.com/goodylabs/awxhelper/internal/services/dto"
+	"github.com/goodylabs/awxhelper/internal/services/helpers"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
 	"github.com/goodylabs/awxhelper/pkg/utils"
 )
@@ -25,7 +26,7 @@ func NewConfigureUseCase(prompter ports.Prompter, awxconnector ports.AwxConnecto
 }
 
 func (uc *ConfigureUseCase) Execute(opts *ConfigureOpts) error {
-	var cfg awxhelperconfig.Config
+	var cfg dto.AwxConfig
 	var err error
 
 	cfg.URL, err = uc.getOrPrompt(opts.URL, "Enter AWX url")
@@ -43,13 +44,11 @@ func (uc *ConfigureUseCase) Execute(opts *ConfigureOpts) error {
 		return err
 	}
 
-	cfg.LastVersionCheck = utils.GetTodayDate()
-
 	if err = uc.awxconnector.ConfigureConnection(&cfg); err != nil {
 		return err
 	}
 
-	configPath := awxhelperconfig.GetConfigPath()
+	configPath := helpers.GetConfigPath()
 	return utils.WriteJSON(configPath, cfg)
 }
 

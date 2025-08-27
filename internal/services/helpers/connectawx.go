@@ -1,16 +1,15 @@
-package services
+package helpers
 
 import (
 	"fmt"
 
-	"github.com/goodylabs/awxhelper/internal/awxhelperconfig"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
 )
 
 func ConnectAwx(awxconnector ports.AwxConnector) error {
 	fmt.Println("Connecting to AWX...")
-	path := awxhelperconfig.GetConfigPath()
-	cfg, err := awxhelperconfig.RetriveConfig(path)
+	path := GetConfigPath()
+	cfg, err := RetriveConfig(path)
 	if err != nil {
 		return err
 	}

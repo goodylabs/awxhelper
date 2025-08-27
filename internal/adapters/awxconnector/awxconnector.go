@@ -10,7 +10,6 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
-	"github.com/goodylabs/awxhelper/internal/awxhelperconfig"
 	"github.com/goodylabs/awxhelper/internal/services/dto"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
 	"github.com/goodylabs/awxhelper/pkg/config"
@@ -29,7 +28,7 @@ func NewAwxConnector() ports.AwxConnector {
 	}
 }
 
-func (a *awxconnector) ConfigureConnection(cfg *awxhelperconfig.Config) error {
+func (a *awxconnector) ConfigureConnection(cfg *dto.AwxConfig) error {
 	a.baseURL = cfg.URL
 	a.username = cfg.Username
 	a.password = cfg.Password

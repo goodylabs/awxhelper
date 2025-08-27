@@ -1,7 +1,7 @@
 package app
 
 import (
-	services "github.com/goodylabs/awxhelper/internal/services/helpers"
+	"github.com/goodylabs/awxhelper/internal/services/helpers"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
 )
 
@@ -18,7 +18,7 @@ func NewRestoreBackup(prompter ports.Prompter, awxconnector ports.AwxConnector) 
 }
 
 func (uc *RunTemplateUseCase) Execute(templatePrefix string) error {
-	if err := services.ConnectAwx(uc.awxconnector); err != nil {
+	if err := helpers.ConnectAwx(uc.awxconnector); err != nil {
 		return err
 	}
 

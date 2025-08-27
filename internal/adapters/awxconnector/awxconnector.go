@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"strconv"
 	"time"
 
@@ -16,24 +15,22 @@ import (
 )
 
 type awxconnector struct {
-	client   *http.Client
-	baseURL  string
-	username string
-	password string
+	httpconnector ports.HttpConnector
+	httpCfg       ports.HttpConnOpts
 }
 
-func NewAwxConnector() ports.AwxConnector {
+func NewAwxConnector(httpconnector ports.HttpConnector) ports.AwxConnector {
 	return &awxconnector{
-		client: &http.Client{},
+		httpconnector: httpconnector,
 	}
 }
 
 func (a *awxconnector) ConfigureConnection(cfg *dto.AwxConfig) error {
-	a.baseURL = cfg.URL
-	a.username = cfg.Username
-	a.password = cfg.Password
+	a.httpCfg.BaseURL = cfg.URL
+	a.httpCfg.Username = cfg.Username
+	a.httpCfg.Password = cfg.Password
 
-	respBody, statusCode, err := a.doGet("/api/v2/ping/")
+	respBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, "/api/v2/ping/")
 	if err != nil {
 		return fmt.Errorf("failed to ping AWX: %w", err)
 	}
@@ -45,11 +42,8 @@ func (a *awxconnector) ConfigureConnection(cfg *dto.AwxConfig) error {
 }
 
 func (a *awxconnector) ListJobTemplates(prefix string) ([]dto.PrompterItem, error) {
-	if a.client == nil {
-		return nil, errors.New("AWX client is not configured")
-	}
 	url := fmt.Sprintf("/api/v2/job_templates/?name__icontains=%s", prefix)
-	respBody, statusCode, err := a.doGet(url)
+	respBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, url)
 	if err != nil {
 		return nil, err
 	}
@@ -80,9 +74,6 @@ func (a *awxconnector) ListJobTemplates(prefix string) ([]dto.PrompterItem, erro
 }
 
 func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int, error) {
-	if a.client == nil {
-		return 0, errors.New("AWX client is not configured")
-	}
 	templateIdInt, err := strconv.Atoi(templateId)
 	if err != nil {
 		return 0, fmt.Errorf("invalid template id: %w", err)
@@ -94,7 +85,7 @@ func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int,
 		"inventory": config.INVENTORY_ID,
 	}
 
-	respBody, statusCode, err := a.doPost(url, launchBody)
+	respBody, statusCode, err := a.httpconnector.DoPost(a.httpCfg, url, launchBody)
 	if err != nil {
 		return 0, err
 	}
@@ -108,6 +99,7 @@ func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int,
 	err = json.Unmarshal(respBody, &response)
 	return response.ID, err
 }
+
 func (a *awxconnector) JobProgress(jobId int) error {
 	url := fmt.Sprintf("/api/v2/jobs/%d/", jobId)
 	start := time.Now()
@@ -118,7 +110,7 @@ func (a *awxconnector) JobProgress(jobId int) error {
 	defer s.Stop()
 
 	for {
-		respBody, statusCode, err := a.doGet(url)
+		respBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, url)
 		if err != nil {
 			s.Stop()
 			return fmt.Errorf("failed to get job status: %w", err)
@@ -154,7 +146,7 @@ func (a *awxconnector) JobProgress(jobId int) error {
 			statusColored = job.Status
 		}
 
-		detailedInfoUrl := fmt.Sprintf("%s/#/jobs/playbook/%d/output", a.baseURL, jobId)
+		detailedInfoUrl := fmt.Sprintf("%s/#/jobs/playbook/%d/output", a.httpCfg.BaseURL, jobId)
 		s.Suffix = fmt.Sprintf(" Job ID %d running for %v, status: %s - more info: %s", jobId, elapsed, statusColored, detailedInfoUrl)
 
 		if job.Status == "canceled" || job.Status == "failed" {

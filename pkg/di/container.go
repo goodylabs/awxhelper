@@ -2,6 +2,7 @@ package di
 
 import (
 	"github.com/goodylabs/awxhelper/internal/adapters/awxconnector"
+	"github.com/goodylabs/awxhelper/internal/adapters/httpconnector"
 	"github.com/goodylabs/awxhelper/internal/adapters/prompter"
 	"github.com/goodylabs/awxhelper/internal/app"
 	"go.uber.org/dig"
@@ -9,6 +10,8 @@ import (
 
 func CreateContainer() *dig.Container {
 	container := dig.New()
+
+	container.Provide(httpconnector.NewHttpConnector)
 
 	container.Provide(prompter.NewPrompter)
 	container.Provide(awxconnector.NewAwxConnector)

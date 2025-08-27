@@ -1,14 +1,26 @@
-package awxconnector
+package httpconnector
 
 import (
 	"bytes"
 	"encoding/json"
 	"io"
 	"net/http"
+
+	"github.com/goodylabs/awxhelper/internal/services/ports"
 )
 
-func (a *awxconnector) doGet(path string) ([]byte, int, error) {
-	fullURL := a.baseURL + path
+type httpconnector struct {
+	client *http.Client
+}
+
+func NewHttpConnector() *httpconnector {
+	return &httpconnector{
+		client: &http.Client{},
+	}
+}
+
+func (h *httpconnector) DoGet(opts ports.HttpConnOpts, path string) ([]byte, int, error) {
+	fullURL := opts.BaseURL + path
 
 	var body []byte
 	var status int
@@ -19,9 +31,9 @@ func (a *awxconnector) doGet(path string) ([]byte, int, error) {
 		if reqErr != nil {
 			return nil, 0, reqErr
 		}
-		req.SetBasicAuth(a.username, a.password)
+		req.SetBasicAuth(opts.Username, opts.Password)
 
-		resp, doErr := a.client.Do(req)
+		resp, doErr := h.client.Do(req)
 		if doErr != nil {
 			err = doErr
 			continue
@@ -39,8 +51,8 @@ func (a *awxconnector) doGet(path string) ([]byte, int, error) {
 	return body, status, err
 }
 
-func (a *awxconnector) doPost(path string, bodyData any) ([]byte, int, error) {
-	fullURL := a.baseURL + path
+func (h *httpconnector) DoPost(opts ports.HttpConnOpts, path string, bodyData any) ([]byte, int, error) {
+	fullURL := opts.BaseURL + path
 	jsonBody, err := json.Marshal(bodyData)
 	if err != nil {
 		return nil, 0, err
@@ -50,9 +62,9 @@ func (a *awxconnector) doPost(path string, bodyData any) ([]byte, int, error) {
 		return nil, 0, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.SetBasicAuth(a.username, a.password)
+	req.SetBasicAuth(opts.Username, opts.Password)
 
-	resp, err := a.client.Do(req)
+	resp, err := h.client.Do(req)
 	if err != nil {
 		return nil, 0, err
 	}

@@ -13,7 +13,7 @@ type httpconnector struct {
 	client *http.Client
 }
 
-func NewHttpConnector() *httpconnector {
+func NewHttpConnector() ports.HttpConnector {
 	return &httpconnector{
 		client: &http.Client{},
 	}

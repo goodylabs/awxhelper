@@ -53,8 +53,13 @@ func (a *awxconnector) ListJobTemplates(prefix string) ([]dto.PrompterItem, erro
 
 	var response struct {
 		Results []struct {
-			ID   int    `json:"id"`
-			Name string `json:"name"`
+			ID           int    `json:"id"`
+			Name         string `json:"name"`
+			SummaryFilds struct {
+				Labels struct {
+					Results []string `json:"results"`
+				} `json:"labels"`
+			} `json:"summary_fields"`
 		} `json:"results"`
 	}
 	err = json.Unmarshal(respBody, &response)

@@ -56,7 +56,7 @@ To download the database, run the commands below:
 
 curl -L %s -o /tmp/%s
 gunzip -f /tmp/%s
-echo "Database downloaded and unzipped to /tmp/%s"
+echo "\nDatabase dump downloaded and unzipped to /tmp/%s"
 
 Important note: the link will expire in 60 minutes!
 ===================================================
@@ -70,9 +70,9 @@ func (uc *RunDownloadDB) DisplayInstruction(events []ports.Event) {
 
 			fileName := strings.Split(event.EventData.Res.Msg, "archivus/")[1]
 			fileName = strings.Split(fileName, ".gz")[0]
-			fileName = fileName + ".gz"
+			fileNameGz := fileName + ".gz"
 
-			fmt.Printf(downloadDbHint, url, fileName, fileName, fileName)
+			fmt.Printf(downloadDbHint, url, fileNameGz, fileNameGz, fileName)
 			return
 		}
 	}

@@ -1,12 +1,29 @@
 #!/bin/bash
 
+part=${1:-patch}
+
 latest_tag=$(git tag --sort=-v:refname | head -n1)
 
 if [ -z "$latest_tag" ]; then
     new_tag="v0.0.1"
 else
     IFS='.' read -r major minor patch <<<"${latest_tag#v}"
-    patch=$((patch + 1))
+
+    case "$part" in
+        major)
+            major=$((major + 1))
+            minor=0
+            patch=0
+            ;;
+        minor)
+            minor=$((minor + 1))
+            patch=0
+            ;;
+        patch|*)
+            patch=$((patch + 1))
+            ;;
+    esac
+
     new_tag="v${major}.${minor}.${patch}"
 fi
 

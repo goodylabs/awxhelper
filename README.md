@@ -23,5 +23,7 @@ awxhelper configure
 # Available Commands
 
 ```bash
-
+configure     Configure your AWX connection
+downloaddb    Download database dump
+forceupdate   Force check for new updates and install if available
 ```

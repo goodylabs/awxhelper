@@ -12,7 +12,7 @@ import (
 
 var forceupdateCmd = &cobra.Command{
 	Use:   "forceupdate",
-	Short: "Force check for updates and apply if available",
+	Short: "Force check for new updates and install if available",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := config.GetReleaser().ForceUpdate(); err != nil {
 			fmt.Println("Error checking for updates:", err)

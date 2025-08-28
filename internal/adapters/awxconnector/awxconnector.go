@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
-	"github.com/fatih/color"
 	"github.com/goodylabs/awxhelper/internal/services/dto"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
 	"github.com/goodylabs/awxhelper/pkg/config"
@@ -106,65 +107,74 @@ func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int,
 }
 
 func (a *awxconnector) JobProgress(jobId int) error {
-	url := fmt.Sprintf("/api/v2/jobs/%d/", jobId)
-	start := time.Now()
+	path := fmt.Sprintf("/api/v2/jobs/%d/job_events?page_size=100", jobId)
+
+	type Event struct {
+		Event   string `json:"event"`
+		Task    string `json:"task,omitempty"`
+		Changed bool   `json:"changed,omitempty"`
+		Failed  bool   `json:"failed,omitempty"`
+		Created string `json:"created,omitempty"`
+	}
+	var events []Event
 
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
-	s.Suffix = fmt.Sprintf(" Job ID %d initializing...", jobId)
-	s.Start()
-	defer s.Stop()
 
 	for {
-		respBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, url)
+		if len(events) > 0 && events[len(events)-1].Event == "playbook_on_stats" {
+			s.Stop()
+			fmt.Println("Job completed.")
+			break
+		}
+
+		resBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, path)
 		if err != nil {
 			s.Stop()
-			return fmt.Errorf("failed to get job status: %w", err)
+			log.Fatal("failed to ping AWX:", err)
 		}
 		if statusCode != 200 {
 			s.Stop()
-			return fmt.Errorf("unexpected status code %d when getting job status", statusCode)
+			log.Fatal("failed to ping AWX: unauthorized or AWX not reachable")
 		}
 
-		var job struct {
-			Status string `json:"status"`
-			Failed bool   `json:"failed"`
+		type responseDTO struct {
+			Results []Event `json:"results"`
 		}
-		err = json.Unmarshal(respBody, &job)
+		var resp responseDTO
+		err = json.Unmarshal(resBody, &resp)
 		if err != nil {
 			s.Stop()
-			return fmt.Errorf("failed to unmarshal job status json: %w", err)
+			return fmt.Errorf("failed to unmarshal job events: %w", err)
 		}
 
-		elapsed := time.Since(start).Round(time.Second)
+		newEvents := resp.Results[len(events):]
 
-		var statusColored string
-		switch job.Status {
-		case "running":
-			statusColored = color.BlueString(job.Status)
-		case "canceled", "failed":
-			statusColored = color.RedString(job.Status)
-		case "pending":
-			statusColored = color.HiBlackString(job.Status)
-		case "successful":
-			statusColored = color.GreenString(job.Status)
-		default:
-			statusColored = job.Status
+		for _, newEvent := range newEvents {
+			if newEvent.Event != "runner_on_ok" {
+				continue
+			}
+
+			var color = "\033[34m"
+			if newEvent.Changed {
+				color = "\033[32m"
+			}
+			if newEvent.Failed {
+				color = "\033[31m"
+			}
+
+			date := strings.Split(newEvent.Created, ".")[0]
+			date = strings.Split(date, "T")[1]
+			fmt.Printf("%s - %s%s\033[0m\n", date, color, newEvent.Task)
 		}
 
-		detailedInfoUrl := fmt.Sprintf("%s/#/jobs/playbook/%d/output", a.httpCfg.BaseURL, jobId)
-		s.Suffix = fmt.Sprintf(" Job ID %d running for %v, status: %s - more info: %s", jobId, elapsed, statusColored, detailedInfoUrl)
+		events = resp.Results
 
-		if job.Status == "canceled" || job.Status == "failed" {
-			s.Stop()
-			fmt.Printf("\nJob ID %d failed or errored\n", jobId)
-			return nil
-		}
-		if job.Status == "successful" {
-			s.Stop()
-			fmt.Printf("\nJob ID %d completed successfully\n", jobId)
-			return nil
-		}
+		s.Stop()
+		s.Suffix = " Waiting for new job events..."
+		s.Start()
+		defer s.Stop()
 
 		time.Sleep(5 * time.Second)
 	}
+	return nil
 }

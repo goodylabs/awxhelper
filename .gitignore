@@ -2,3 +2,4 @@
 .env
 awxhelper-config.json
 bin
+.tmp

@@ -17,7 +17,8 @@ func CreateContainer() *dig.Container {
 	container.Provide(awxconnector.NewAwxConnector)
 
 	container.Provide(app.NewConfigureUseCase)
-	container.Provide(app.NewRestoreBackup)
+	container.Provide(app.NewRunTemplateUseCase)
+	container.Provide(app.NewDownloadDB)
 
 	return container
 }

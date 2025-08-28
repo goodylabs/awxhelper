@@ -1,15 +1,15 @@
-package helpers
+package services
 
 import (
 	"path/filepath"
 
-	"github.com/goodylabs/awxhelper/internal/services/dto"
+	"github.com/goodylabs/awxhelper/internal/services/ports"
 	"github.com/goodylabs/awxhelper/pkg/config"
 	"github.com/goodylabs/awxhelper/pkg/utils"
 )
 
-func RetriveConfig(path string) (*dto.AwxConfig, error) {
-	config, err := utils.ReadJSON[dto.AwxConfig](path)
+func RetriveConfig(path string) (*ports.AwxConfig, error) {
+	config, err := utils.ReadJSON[ports.AwxConfig](path)
 	if err != err {
 		return nil, err
 	}

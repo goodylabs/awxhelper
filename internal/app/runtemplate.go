@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/goodylabs/awxhelper/internal/services/helpers"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
+	"github.com/goodylabs/awxhelper/internal/services/services"
 )
 
 type RunTemplateUseCase struct {
@@ -10,15 +10,15 @@ type RunTemplateUseCase struct {
 	awxconnector ports.AwxConnector
 }
 
-func NewRestoreBackup(prompter ports.Prompter, awxconnector ports.AwxConnector) *RunTemplateUseCase {
-	uc := new(RunTemplateUseCase)
-	uc.prompter = prompter
-	uc.awxconnector = awxconnector
-	return uc
+func NewRunTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector) *RunTemplateUseCase {
+	return &RunTemplateUseCase{
+		prompter:     prompter,
+		awxconnector: awxconnector,
+	}
 }
 
 func (uc *RunTemplateUseCase) Execute(templatePrefix string) error {
-	if err := helpers.ConnectAwx(uc.awxconnector); err != nil {
+	if err := services.ConnectAwx(uc.awxconnector); err != nil {
 		return err
 	}
 
@@ -37,7 +37,7 @@ func (uc *RunTemplateUseCase) Execute(templatePrefix string) error {
 		return err
 	}
 
-	if err := uc.awxconnector.JobProgress(jobId); err != nil {
+	if _, err := uc.awxconnector.JobProgress(jobId); err != nil {
 		return err
 	}
 

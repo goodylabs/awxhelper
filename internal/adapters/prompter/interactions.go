@@ -8,12 +8,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/goodylabs/awxhelper/internal/services/dto"
+	"github.com/goodylabs/awxhelper/internal/services/ports"
 	"github.com/manifoldco/promptui"
 	"golang.org/x/term"
 )
 
-func (p *prompter) runPrompter(options []dto.PrompterItem, label string) (dto.PrompterItem, error) {
+func (p *prompter) runPrompter(options []ports.PrompterItem, label string) (ports.PrompterItem, error) {
 	sort.Slice(options, func(i, j int) bool {
 		return options[i].Label < options[j].Label
 	})
@@ -58,7 +58,7 @@ func (p *prompter) clear() {
 	fmt.Print("\033[H\033[2J")
 }
 
-func (p *prompter) hashOptions(options []dto.PrompterItem) string {
+func (p *prompter) hashOptions(options []ports.PrompterItem) string {
 	labels := make([]string, len(options))
 	for i, opt := range options {
 		labels[i] = opt.Label

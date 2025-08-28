@@ -1,7 +1,6 @@
 package prompter
 
 import (
-	"github.com/goodylabs/awxhelper/internal/services/dto"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
 	"github.com/manifoldco/promptui"
 )
@@ -16,7 +15,7 @@ func NewPrompter() ports.Prompter {
 	}
 }
 
-func (p *prompter) ChooseFromList(options []dto.PrompterItem, label string) (dto.PrompterItem, error) {
+func (p *prompter) ChooseFromList(options []ports.PrompterItem, label string) (ports.PrompterItem, error) {
 	return p.runPrompter(options, label)
 }
 

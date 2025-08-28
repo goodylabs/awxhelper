@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
+	"os"
+	"os/signal"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
-	"github.com/goodylabs/awxhelper/internal/services/dto"
 	"github.com/goodylabs/awxhelper/internal/services/ports"
 	"github.com/goodylabs/awxhelper/pkg/config"
 )
@@ -26,7 +26,7 @@ func NewAwxConnector(httpconnector ports.HttpConnector) ports.AwxConnector {
 	}
 }
 
-func (a *awxconnector) ConfigureConnection(cfg *dto.AwxConfig) error {
+func (a *awxconnector) ConfigureConnection(cfg *ports.AwxConfig) error {
 	a.httpCfg.BaseURL = cfg.URL
 	a.httpCfg.Username = cfg.Username
 	a.httpCfg.Password = cfg.Password
@@ -42,7 +42,7 @@ func (a *awxconnector) ConfigureConnection(cfg *dto.AwxConfig) error {
 	return nil
 }
 
-func (a *awxconnector) ListJobTemplates(prefix string) ([]dto.PrompterItem, error) {
+func (a *awxconnector) ListJobTemplates(prefix string) ([]ports.PrompterItem, error) {
 	url := fmt.Sprintf("/api/v2/job_templates/?name__icontains=%s", prefix)
 	respBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, url)
 	if err != nil {
@@ -68,9 +68,9 @@ func (a *awxconnector) ListJobTemplates(prefix string) ([]dto.PrompterItem, erro
 		return nil, err
 	}
 
-	var jobTemplates []dto.PrompterItem
+	var jobTemplates []ports.PrompterItem
 	for _, r := range response.Results {
-		jobTemplates = append(jobTemplates, dto.PrompterItem{
+		jobTemplates = append(jobTemplates, ports.PrompterItem{
 			Label: r.Name,
 			Value: strconv.Itoa(r.ID),
 		})
@@ -106,55 +106,75 @@ func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int,
 	return response.ID, err
 }
 
-func (a *awxconnector) JobProgress(jobId int) error {
+func (a *awxconnector) JobProgress(jobId int) ([]ports.Event, error) {
 	path := fmt.Sprintf("/api/v2/jobs/%d/job_events?page_size=100", jobId)
 
-	type Event struct {
-		Event   string `json:"event"`
-		Task    string `json:"task,omitempty"`
-		Changed bool   `json:"changed,omitempty"`
-		Failed  bool   `json:"failed,omitempty"`
-		Created string `json:"created,omitempty"`
-	}
-	var events []Event
+	var events []ports.Event
 
-	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
+	s := a.setupSpinner()
+	s.Start()
+	defer func() {
+		s.Stop()
+		fmt.Print("\r\033[K") // usuwa spinner z ostatniej linii
+	}()
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt)
+	go func() {
+		<-sigChan
+		s.Stop()
+		fmt.Print("\r\033[K")
+		os.Exit(1)
+	}()
 
 	for {
 		if len(events) > 0 && events[len(events)-1].Event == "playbook_on_stats" {
 			s.Stop()
+			fmt.Print("\r\033[K")
 			fmt.Println("Job completed.")
 			break
 		}
 
-		resBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, path)
-		if err != nil {
-			s.Stop()
-			log.Fatal("failed to ping AWX:", err)
+		type eventRes struct {
+			Results []ports.Event `json:"results"`
 		}
-		if statusCode != 200 {
-			s.Stop()
-			log.Fatal("failed to ping AWX: unauthorized or AWX not reachable")
-		}
+		var resp eventRes
+		var err error
+		for range 3 {
+			var resBody []byte
+			var statusCode int
+			resBody, statusCode, connectorErr := a.httpconnector.DoGet(a.httpCfg, path)
+			if connectorErr != nil {
+				err = fmt.Errorf("failed to ping AWX: %w", connectorErr)
+				continue
+			}
+			if statusCode != 200 {
+				err = fmt.Errorf("failed to ping AWX: unauthorized or AWX not reachable")
+				continue
+			}
 
-		type responseDTO struct {
-			Results []Event `json:"results"`
+			err = json.Unmarshal(resBody, &resp)
+			if err != nil {
+				err = fmt.Errorf("failed to unmarshal job events: %w", err)
+				continue
+			}
+			err = nil
+			break
 		}
-		var resp responseDTO
-		err = json.Unmarshal(resBody, &resp)
 		if err != nil {
-			s.Stop()
-			return fmt.Errorf("failed to unmarshal job events: %w", err)
+			return []ports.Event{}, err
 		}
 
 		newEvents := resp.Results[len(events):]
-
 		for _, newEvent := range newEvents {
 			if newEvent.Event != "runner_on_ok" {
 				continue
 			}
 
-			var color = "\033[34m"
+			s.Stop()
+			fmt.Print("\r\033[K") // czyści linię spinnera
+
+			color := "\033[34m"
 			if newEvent.Changed {
 				color = "\033[32m"
 			}
@@ -165,16 +185,29 @@ func (a *awxconnector) JobProgress(jobId int) error {
 			date := strings.Split(newEvent.Created, ".")[0]
 			date = strings.Split(date, "T")[1]
 			fmt.Printf("%s - %s%s\033[0m\n", date, color, newEvent.Task)
+
+			s.Start() // spinner wraca na dół
 		}
 
 		events = resp.Results
-
-		s.Stop()
-		s.Suffix = " Waiting for new job events..."
-		s.Start()
-		defer s.Stop()
-
 		time.Sleep(5 * time.Second)
 	}
-	return nil
+	return events, nil
+}
+
+func (a *awxconnector) setupSpinner() *spinner.Spinner {
+	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
+	s.Suffix = " Waiting for new job events..."
+	s.Start()
+
+	go func(sp *spinner.Spinner) {
+		sigChan := make(chan os.Signal, 1)
+		signal.Notify(sigChan, os.Interrupt)
+		<-sigChan
+		sp.Stop()
+		fmt.Print("\r")
+		os.Exit(1)
+	}(s)
+
+	return s
 }

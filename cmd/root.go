@@ -40,6 +40,9 @@ func Execute() {
 
 func init() {
 	config.LoadConfig()
+
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
+
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.Flags().BoolP("version", "v", false, "Print version and exit")
 }

@@ -22,7 +22,7 @@ func (p *prompter) ChooseFromList(options []ports.PrompterItem, label string) (p
 func (p *prompter) PromptForString(message string) (string, error) {
 	prompt := promptui.Prompt{
 		Label:   message,
-		Pointer: promptui.PipeCursor,
+		Pointer: promptui.DefaultCursor,
 	}
 	return prompt.Run()
 }

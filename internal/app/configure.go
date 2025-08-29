@@ -38,7 +38,7 @@ func (uc *ConfigureUseCase) Execute(opts *ConfigureOpts) error {
 		return err
 	}
 
-	cfg.Password, err = uc.getOrPrompt(opts.Password, "Enter AWX password")
+	cfg.Password, err = uc.getOrPromptSecret(opts.Password, "Enter AWX password")
 	if err != nil {
 		return err
 	}
@@ -56,4 +56,11 @@ func (uc *ConfigureUseCase) getOrPrompt(value, prompt string) (string, error) {
 		return value, nil
 	}
 	return uc.prompter.PromptForString(prompt)
+}
+
+func (uc *ConfigureUseCase) getOrPromptSecret(value, prompt string) (string, error) {
+	if value != "" {
+		return value, nil
+	}
+	return uc.prompter.PromptForSecret(prompt)
 }

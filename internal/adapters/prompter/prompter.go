@@ -26,3 +26,12 @@ func (p *prompter) PromptForString(message string) (string, error) {
 	}
 	return prompt.Run()
 }
+
+func (p *prompter) PromptForSecret(message string) (string, error) {
+	prompt := promptui.Prompt{
+		Label:   message,
+		Pointer: promptui.DefaultCursor,
+		Mask:    '*',
+	}
+	return prompt.Run()
+}

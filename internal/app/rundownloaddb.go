@@ -54,7 +54,7 @@ const downloadDbHint = `
 =================================================
 To download the database, run the commands below:
 
-curl -L %s -o /tmp/%s
+curl -L "%s" -o /tmp/%s
 gunzip -f /tmp/%s
 echo "\nDatabase dump downloaded and unzipped to /tmp/%s"
 

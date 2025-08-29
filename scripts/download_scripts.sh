@@ -7,7 +7,10 @@ APP_DIR="${HOME}/.${APP}"
 APP_BIN_DIR="${APP_DIR}/bin"
 APP_BIN_PATH="${APP_BIN_DIR}/${APP}"
 
+echo "Creating directory: $APP_DIR"
 mkdir -p $APP_DIR
+
+echo "Creating directory: $APP_BIN_DIR"
 mkdir -p $APP_BIN_DIR
 
 os_type=$(uname -s | tr '[:upper:]' '[:lower:]')
@@ -29,7 +32,7 @@ if [[ -z "$artifact_url" ]]; then
     exit 1
 fi
 
-echo "Downloading ${APP} binary for ${os_type}-${arch}..."
+echo "Downloading ${APP} binary for ${os_type}-${arch} to ${APP_BIN_PATH}"
 
 curl --fail --location --progress-bar --compressed --retry 3 --retry-delay 5 \
   --max-time 10 -o "$APP_BIN_PATH" "$artifact_url"

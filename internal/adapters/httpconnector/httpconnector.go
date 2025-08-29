@@ -39,7 +39,6 @@ func (h *httpconnector) DoGet(opts ports.HttpConnOpts, path string) ([]byte, int
 			continue
 		}
 
-		defer resp.Body.Close()
 		body, err = io.ReadAll(resp.Body)
 		status = resp.StatusCode
 

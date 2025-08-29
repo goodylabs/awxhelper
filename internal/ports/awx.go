@@ -24,4 +24,9 @@ type Event struct {
 			Msg string `json:"msg,omitempty"`
 		} `json:"res"`
 	} `json:"event_data"`
+	SummaryFields struct {
+		Job struct {
+			Status string `json:"status"`
+		} `json:"job"`
+	} `json:"summary_fields"`
 }

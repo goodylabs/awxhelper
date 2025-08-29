@@ -63,12 +63,17 @@ Important note: the link will expire in 60 minutes!
 `
 
 func (uc *RunDownloadDB) DisplayInstruction(events []ports.Event) {
+	bucketPhrase := "backupus/"
 	for _, event := range events {
 		if event.Task == "Print url" && event.Event == "runner_on_ok" {
 
 			url := event.EventData.Res.Msg
 
-			fileName := strings.Split(event.EventData.Res.Msg, "archivus/")[1]
+			if !strings.Contains(url, bucketPhrase) || !strings.Contains(url, ".gz") {
+				fmt.Printf("Contact with devops team. Can not extract installation script with url: %s", url)
+				return
+			}
+			fileName := strings.Split(event.EventData.Res.Msg, bucketPhrase)[1]
 			fileName = strings.Split(fileName, ".gz")[0]
 			fileNameGz := fileName + ".gz"
 

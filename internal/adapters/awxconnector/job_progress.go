@@ -66,7 +66,7 @@ func (a *awxconnector) JobProgress(jobId int) ([]ports.Event, error) {
 
 		newEvents := resp.Results[len(events):]
 		for _, newEvent := range newEvents {
-			if newEvent.Event != "runner_on_ok" && newEvent.Event != "runner_on_failed" {
+			if newEvent.Event != "runner_on_ok" {
 				continue
 			}
 

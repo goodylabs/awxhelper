@@ -17,5 +17,5 @@ func RetriveConfig(path string) (*ports.AwxConfig, error) {
 }
 
 func GetConfigPath() string {
-	return filepath.Join(config.AWXHELPER_DIR, "awxhelper-config.json")
+	return filepath.Join(config.GetAwxhelperDir(), "awxhelper-config.json")
 }

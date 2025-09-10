@@ -8,12 +8,10 @@ import (
 
 	"github.com/goodylabs/awxhelper/internal/adapters/httpconnector"
 	"github.com/goodylabs/awxhelper/internal/ports"
-	"github.com/goodylabs/awxhelper/pkg/config"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	config.LoadConfig()
 	godotenv.Load(".env")
 	URL := os.Getenv("AWX_URL")
 	USERNAME := os.Getenv("AWX_USER")

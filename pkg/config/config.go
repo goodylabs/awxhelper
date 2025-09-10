@@ -10,18 +10,29 @@ import (
 )
 
 var (
-	AWXHELPER_DIR string
+	awxhelperDir string
 )
 
-func LoadConfig() {
-	godotenv.Load(".env")
-	switch os.Getenv("AWXHELPER_ENV") {
-	case "development":
-		rootDir := findProjectRoot()
-		AWXHELPER_DIR = path.Join(rootDir, ".development")
-	default:
-		AWXHELPER_DIR = path.Join(os.Getenv("HOME"), ".awxhelper")
+func GetAwxhelperDir() string {
+	if awxhelperDir == "" {
+		godotenv.Load(".env")
+		envValue := getEnvOrError("AWXHELPER_ENV")
+		if envValue == "development" {
+			rootDir := findProjectRoot()
+			awxhelperDir = path.Join(rootDir, ".development")
+		} else {
+			awxhelperDir = path.Join(getEnvOrError("HOME"), ".awxhelper")
+		}
 	}
+	return awxhelperDir
+}
+
+func getEnvOrError(key string) string {
+	envValue := os.Getenv(key)
+	if envValue == "" {
+		log.Fatalf("Environment variable %s is not set", key)
+	}
+	return envValue
 }
 
 func findProjectRoot() string {

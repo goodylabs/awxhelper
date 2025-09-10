@@ -39,8 +39,6 @@ func Execute() {
 }
 
 func init() {
-	config.LoadConfig()
-
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

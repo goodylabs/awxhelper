@@ -16,7 +16,7 @@ var (
 func GetAwxhelperDir() string {
 	if awxhelperDir == "" {
 		godotenv.Load(".env")
-		envValue := getEnvOrError("AWXHELPER_ENV")
+		envValue := os.Getenv("AWXHELPER_ENV")
 		if envValue == "development" {
 			rootDir := findProjectRoot()
 			awxhelperDir = path.Join(rootDir, ".development")

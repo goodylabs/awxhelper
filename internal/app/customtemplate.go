@@ -22,7 +22,7 @@ func (uc *CustomTemplateUseCase) Execute() error {
 		return err
 	}
 
-	phrase, err := uc.prompter.PromptForString("Filter template name by phrase:")
+	phrase, err := uc.prompter.PromptForString("Filter template name by phrase")
 	if err != nil {
 		return err
 	}

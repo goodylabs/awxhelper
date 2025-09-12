@@ -19,6 +19,7 @@ func CreateContainer() *dig.Container {
 	container.Provide(app.NewConfigureUseCase)
 	container.Provide(app.NewRunTemplateUseCase)
 	container.Provide(app.NewDownloadDB)
+	container.Provide(app.NewCustomTemplateUseCase)
 
 	return container
 }

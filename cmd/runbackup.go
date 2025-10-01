@@ -26,6 +26,6 @@ var runbackupCmd = &cobra.Command{
 }
 
 func init() {
-	runbackupCmd.Hidden = true
+	// runbackupCmd.Hidden = true
 	rootCmd.AddCommand(runbackupCmd)
 }

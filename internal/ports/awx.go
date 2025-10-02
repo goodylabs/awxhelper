@@ -4,7 +4,7 @@ type AwxConnector interface {
 	ConfigureConnection(cfg *AwxConfig) error
 	ListJobTemplates(prefix string) ([]PrompterItem, error)
 	LaunchJob(templateId string, params map[string]any) (int, error)
-	JobProgress(jobId int) ([]Event, error)
+	GetJobEvents(jobId int) ([]Event, error)
 }
 
 type AwxConfig struct {

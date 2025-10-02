@@ -1,35 +1,39 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/goodylabs/awxhelper/internal/ports"
 	"github.com/goodylabs/awxhelper/internal/services"
 )
 
-type CustomTemplateUseCase struct {
+type RunDownloadDB struct {
 	prompter             ports.Prompter
 	awxconnector         ports.AwxConnector
 	monitorJobProcessing *services.MonitorJobProgress
+	getEndingInstruction *services.GetEndingInstruction
 }
 
-func NewCustomTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, monitorJobProcessing *services.MonitorJobProgress) *CustomTemplateUseCase {
-	return &CustomTemplateUseCase{
+func NewDownloadDB(
+	prompter ports.Prompter,
+	awxconnector ports.AwxConnector,
+	monitorJobProcessing *services.MonitorJobProgress,
+	getEndingInstruction *services.GetEndingInstruction,
+) *RunDownloadDB {
+	return &RunDownloadDB{
 		prompter:             prompter,
 		awxconnector:         awxconnector,
 		monitorJobProcessing: monitorJobProcessing,
+		getEndingInstruction: getEndingInstruction,
 	}
 }
 
-func (uc *CustomTemplateUseCase) Execute() error {
+func (uc *RunDownloadDB) Execute(templatePrefix string) error {
 	if err := services.ConnectAwx(uc.awxconnector); err != nil {
 		return err
 	}
 
-	phrase, err := uc.prompter.PromptForString("Filter template name by phrase")
-	if err != nil {
-		return err
-	}
-
-	templates, err := uc.awxconnector.ListJobTemplates(phrase)
+	templates, err := uc.awxconnector.ListJobTemplates(templatePrefix)
 	if err != nil {
 		return err
 	}
@@ -44,9 +48,17 @@ func (uc *CustomTemplateUseCase) Execute() error {
 		return err
 	}
 
-	if _, err := uc.monitorJobProcessing.Execute(jobId); err != nil {
+	events, err := uc.monitorJobProcessing.Execute(jobId)
+	if err != nil {
 		return err
 	}
+
+	hint, err := uc.getEndingInstruction.DownloadDb(events)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(hint)
 
 	return nil
 }

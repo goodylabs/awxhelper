@@ -7,6 +7,8 @@ import (
 	"github.com/goodylabs/awxhelper/internal/adapters/awxconnector"
 	"github.com/goodylabs/awxhelper/internal/adapters/httpconnector"
 	"github.com/goodylabs/awxhelper/internal/ports"
+	"github.com/goodylabs/awxhelper/internal/services"
+	"github.com/goodylabs/awxhelper/pkg/config"
 	"github.com/joho/godotenv"
 )
 
@@ -24,7 +26,10 @@ func main() {
 	}); err != nil {
 		log.Fatalf("failed to verify connection: %+v", err)
 	}
-	if _, err := connector.JobProgress(2804); err != nil {
+
+	config.SetVerboseMode(true)
+	svc := services.NewMonitorJobProgress(connector)
+	if _, err := svc.Execute(4654); err != nil {
 		log.Fatalf("failed to get job progress: %+v", err)
 	}
 

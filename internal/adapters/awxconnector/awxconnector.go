@@ -14,6 +14,18 @@ type awxconnector struct {
 	httpCfg       ports.HttpConnOpts
 }
 
+type listJobTemplatesResponse struct {
+	Results []struct {
+		ID           int    `json:"id"`
+		Name         string `json:"name"`
+		SummaryFilds struct {
+			Labels struct {
+				Results []string `json:"results"`
+			} `json:"labels"`
+		} `json:"summary_fields"`
+	} `json:"results"`
+}
+
 func NewAwxConnector(httpconnector ports.HttpConnector) ports.AwxConnector {
 	return &awxconnector{
 		httpconnector: httpconnector,
@@ -60,17 +72,7 @@ func (a *awxconnector) ListJobTemplates(prefix string) ([]ports.PrompterItem, er
 		return nil, fmt.Errorf("failed to list job templates, status %d", statusCode)
 	}
 
-	var response struct {
-		Results []struct {
-			ID           int    `json:"id"`
-			Name         string `json:"name"`
-			SummaryFilds struct {
-				Labels struct {
-					Results []string `json:"results"`
-				} `json:"labels"`
-			} `json:"summary_fields"`
-		} `json:"results"`
-	}
+	var response listJobTemplatesResponse
 	err = json.Unmarshal(respBody, &response)
 	if err != nil {
 		return nil, err

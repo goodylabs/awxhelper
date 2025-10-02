@@ -6,14 +6,16 @@ import (
 )
 
 type RunTemplateUseCase struct {
-	prompter     ports.Prompter
-	awxconnector ports.AwxConnector
+	prompter             ports.Prompter
+	awxconnector         ports.AwxConnector
+	monitorJobProcessing *services.MonitorJobProgress
 }
 
-func NewRunTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector) *RunTemplateUseCase {
+func NewRunTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, monitorJobProcessing *services.MonitorJobProgress) *RunTemplateUseCase {
 	return &RunTemplateUseCase{
-		prompter:     prompter,
-		awxconnector: awxconnector,
+		prompter:             prompter,
+		awxconnector:         awxconnector,
+		monitorJobProcessing: monitorJobProcessing,
 	}
 }
 
@@ -37,7 +39,7 @@ func (uc *RunTemplateUseCase) Execute(templatePrefix string) error {
 		return err
 	}
 
-	if _, err := uc.awxconnector.JobProgress(jobId); err != nil {
+	if _, err := uc.monitorJobProcessing.Execute(jobId); err != nil {
 		return err
 	}
 

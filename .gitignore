@@ -3,3 +3,4 @@
 awxhelper-config.json
 bin
 .tmp
+__debug_*

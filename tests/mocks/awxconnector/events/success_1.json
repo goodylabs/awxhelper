@@ -1,0 +1,541 @@
+[
+  {
+    "event": "verbose",
+    "created": "2025-10-02T10:00:21.461073Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "created": "2025-10-02T10:00:21.930806Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "created": "2025-10-02T10:00:21.932281Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "created": "2025-10-02T10:00:21.933133Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "created": "2025-10-02T10:00:21.933840Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_start",
+    "created": "2025-10-02T10:00:22.678399Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_play_start",
+    "created": "2025-10-02T10:00:22.685125Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "discussion each inside",
+    "created": "2025-10-02T10:00:22.764483Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "green do travel",
+    "created": "2025-10-02T10:00:22.766239Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "cause election plan",
+    "created": "2025-10-02T10:00:22.779383Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_include",
+    "task": "seat authority when",
+    "created": "2025-10-02T10:00:22.793779Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "beyond food shake",
+    "changed": true,
+    "created": "2025-10-02T10:00:22.797771Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "lead nearly blue",
+    "created": "2025-10-02T10:00:22.799311Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "production level most",
+    "changed": true,
+    "created": "2025-10-02T10:01:17.733984Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "from today money",
+    "created": "2025-10-02T10:01:17.739481Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "true face suddenly",
+    "created": "2025-10-02T10:01:17.741247Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "hit home large",
+    "created": "2025-10-02T10:01:17.753381Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_include",
+    "task": "work Republican bar",
+    "created": "2025-10-02T10:01:17.814214Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "fall example believe",
+    "changed": true,
+    "created": "2025-10-02T10:01:17.820035Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "place up increase",
+    "created": "2025-10-02T10:01:17.822651Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "nothing choice rich",
+    "changed": true,
+    "created": "2025-10-02T10:03:02.463107Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "box side create",
+    "changed": true,
+    "created": "2025-10-02T10:03:02.472027Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "couple middle floor",
+    "created": "2025-10-02T10:03:02.475256Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "yeah other much",
+    "changed": true,
+    "created": "2025-10-02T10:03:03.561426Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "prevent heart bad",
+    "changed": true,
+    "created": "2025-10-02T10:03:03.566037Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "phone practice car",
+    "created": "2025-10-02T10:03:03.567670Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "network say nearly",
+    "changed": true,
+    "created": "2025-10-02T10:03:04.182465Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "between still my",
+    "changed": true,
+    "created": "2025-10-02T10:03:04.189243Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "down idea once",
+    "created": "2025-10-02T10:03:04.190946Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "change health physical",
+    "changed": true,
+    "created": "2025-10-02T10:03:08.978218Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "sort risk compare",
+    "created": "2025-10-02T10:03:08.983963Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "off truth begin",
+    "created": "2025-10-02T10:03:08.985863Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "since ask activity",
+    "changed": true,
+    "created": "2025-10-02T10:03:09.436566Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "research environment sound",
+    "created": "2025-10-02T10:03:09.441730Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "sure raise night",
+    "created": "2025-10-02T10:03:09.443314Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "return responsibility anything",
+    "created": "2025-10-02T10:03:09.454062Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_include",
+    "task": "actually memory future",
+    "created": "2025-10-02T10:03:09.464593Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "indeed mean different",
+    "created": "2025-10-02T10:03:09.471950Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "care fine manage",
+    "created": "2025-10-02T10:03:09.473383Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "amount begin present",
+    "created": "2025-10-02T10:03:10.281751Z",
+    "event_data": {
+      "res": {
+        "msg": "OK (0 bytes)"
+      }
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_stats",
+    "changed": true,
+    "created": "2025-10-02T10:03:10.284913Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "successful"
+      }
+    }
+  }
+]

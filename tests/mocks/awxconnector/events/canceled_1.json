@@ -1,0 +1,141 @@
+[
+  {
+    "event": "verbose",
+    "created": "2025-08-29T09:46:36.983810Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "created": "2025-08-29T09:46:37.400567Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "created": "2025-08-29T09:46:37.401911Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "created": "2025-08-29T09:46:37.402980Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "created": "2025-08-29T09:46:37.403808Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_play_start",
+    "created": "2025-08-29T09:46:38.128834Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "when guy stand",
+    "created": "2025-08-29T09:47:13.219049Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "runner_on_ok",
+    "task": "Print url",
+    "created": "2025-08-29T09:47:13.238998Z",
+    "event_data": {
+      "res": {
+        "msg": "https://fra1.digitaloceanspaces.com/backupus/ipsum.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+      }
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "runner_on_start",
+    "task": "factor indeed now",
+    "created": "2025-08-29T09:47:13.220900Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "playbook_on_task_start",
+    "task": "collection start so",
+    "created": "2025-08-29T09:47:13.243573Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  },
+  {
+    "event": "verbose",
+    "task": "career reduce especially",
+    "created": "2025-08-29T09:47:13.262592Z",
+    "event_data": {
+      "res": {}
+    },
+    "summary_fields": {
+      "job": {
+        "status": "canceled"
+      }
+    }
+  }
+]

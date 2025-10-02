@@ -3,10 +3,12 @@ package httpconnector
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
 	"github.com/goodylabs/awxhelper/internal/ports"
+	"github.com/goodylabs/awxhelper/pkg/utils"
 )
 
 type httpconnector struct {
@@ -27,20 +29,25 @@ func (h *httpconnector) DoGet(opts ports.HttpConnOpts, path string) ([]byte, int
 	var err error
 
 	for range 3 {
+		utils.OptionalLog(fmt.Sprintf("GET request %s username: %s, password: %s", fullURL, opts.Username, opts.Password))
 		req, reqErr := http.NewRequest("GET", fullURL, nil)
 		if reqErr != nil {
+			utils.OptionalLog(fmt.Sprintf("GET response reqError: %s", reqErr))
 			return nil, 0, reqErr
 		}
 		req.SetBasicAuth(opts.Username, opts.Password)
 
 		resp, doErr := h.client.Do(req)
 		if doErr != nil {
+			utils.OptionalLog(fmt.Sprintf("Error making GET request to %s: %v", fullURL, doErr))
 			err = doErr
 			continue
 		}
 
 		body, err = io.ReadAll(resp.Body)
 		status = resp.StatusCode
+
+		utils.OptionalLog(fmt.Sprintf("GET response status: %s", resp.Status))
 
 		if err == nil && status < 500 {
 			return body, status, nil

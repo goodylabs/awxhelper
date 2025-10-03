@@ -30,8 +30,6 @@ func (e *GetEndingInstruction) DownloadDb(events []ports.Event) (string, error) 
 	for _, event := range events {
 		if event.Task == "Print url" && event.Event == "runner_on_ok" {
 
-			fmt.Println("ooo")
-
 			url := event.EventData.Res.Msg
 
 			if !strings.Contains(url, bucketPhrase) || !strings.Contains(url, ".gz") {
@@ -43,7 +41,6 @@ func (e *GetEndingInstruction) DownloadDb(events []ports.Event) (string, error) 
 
 			return fmt.Sprintf(downloadDbTemplate, url, fileNameGz, fileNameGz, fileName), nil
 		}
-		fmt.Println(event)
 	}
 	return "", fmt.Errorf("No URL found in the job events - please contact devops team.")
 }

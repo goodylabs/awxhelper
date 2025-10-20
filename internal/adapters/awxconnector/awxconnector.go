@@ -39,7 +39,7 @@ func (a *awxconnector) verifyConnection() error {
 	}
 
 	var data any
-	if err := json.Unmarshal(respBody, &data); err != nil {
+	if err := a.unmarshalResponseBody(respBody, &data); err != nil {
 		return fmt.Errorf("statusCode: %d, failed to unmarshal response: %w", statusCode, err)
 	}
 
@@ -73,8 +73,7 @@ func (a *awxconnector) ListJobTemplates(prefix string) ([]ports.PrompterItem, er
 	}
 
 	var response listJobTemplatesResponse
-	err = json.Unmarshal(respBody, &response)
-	if err != nil {
+	if err := a.unmarshalResponseBody(respBody, &response); err != nil {
 		return nil, err
 	}
 
@@ -112,6 +111,15 @@ func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int,
 	var response struct {
 		ID int `json:"id"`
 	}
-	err = json.Unmarshal(respBody, &response)
+	err = a.unmarshalResponseBody(respBody, &response)
 	return response.ID, err
+}
+
+func (a *awxconnector) unmarshalResponseBody(respBody []byte, out any) error {
+	if err := json.Unmarshal(respBody, &out); err != nil {
+		fmt.Printf("Error: %s", err)
+		fmt.Printf("Response body: \n %s", respBody)
+		return err
+	}
+	return nil
 }

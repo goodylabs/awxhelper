@@ -45,6 +45,8 @@ func (a *awxconnector) verifyConnection() error {
 
 	pretty, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
+		fmt.Printf("Error: %s", err)
+		fmt.Printf("Response body: \n %s", respBody)
 		return fmt.Errorf("statusCode: %d, failed to format JSON: %w", statusCode, err)
 	}
 

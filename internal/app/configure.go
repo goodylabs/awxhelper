@@ -43,11 +43,8 @@ func (uc *ConfigureUseCase) Execute(opts *ConfigureOpts) error {
 		return err
 	}
 
-	if err = uc.awxconnector.ConfigureConnection(&cfg); err != nil {
-		return err
-	}
-
 	configPath := services.GetConfigPath()
+
 	return utils.WriteJSON(configPath, cfg)
 }
 

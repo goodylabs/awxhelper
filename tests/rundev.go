@@ -27,7 +27,7 @@ func main() {
 		log.Fatalf("failed to verify connection: %+v", err)
 	}
 
-	config.SetVerboseMode(true)
+	config.SetDebugMode(true)
 	svc := services.NewMonitorJobProgress(connector)
 	if _, err := svc.Execute(4654); err != nil {
 		log.Fatalf("failed to get job progress: %+v", err)

@@ -11,7 +11,7 @@ import (
 
 var (
 	awxhelperDir string
-	verboseMode  bool
+	debugMode    bool
 )
 
 func GetAwxhelperDir() string {
@@ -28,12 +28,12 @@ func GetAwxhelperDir() string {
 	return awxhelperDir
 }
 
-func IsVerboseMode() bool {
-	return verboseMode
+func IsDebugMode() bool {
+	return debugMode
 }
 
-func SetVerboseMode(v bool) {
-	verboseMode = v
+func SetDebugMode(v bool) {
+	debugMode = v
 }
 
 func getEnvOrError(key string) string {

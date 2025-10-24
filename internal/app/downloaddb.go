@@ -12,6 +12,7 @@ type RunDownloadDB struct {
 	awxconnector         ports.AwxConnector
 	monitorJobProcessing *services.MonitorJobProgress
 	getEndingInstruction *services.GetEndingInstruction
+	connectToAwx         *services.ConnectToAwx
 }
 
 func NewDownloadDB(
@@ -19,17 +20,20 @@ func NewDownloadDB(
 	awxconnector ports.AwxConnector,
 	monitorJobProcessing *services.MonitorJobProgress,
 	getEndingInstruction *services.GetEndingInstruction,
+	connectToAwx *services.ConnectToAwx,
 ) *RunDownloadDB {
 	return &RunDownloadDB{
 		prompter:             prompter,
 		awxconnector:         awxconnector,
 		monitorJobProcessing: monitorJobProcessing,
 		getEndingInstruction: getEndingInstruction,
+		connectToAwx:         connectToAwx,
 	}
 }
 
 func (uc *RunDownloadDB) Execute(templatePrefix string) error {
-	if err := services.ConnectAwx(uc.awxconnector); err != nil {
+	var cfg ports.AwxConfig
+	if err := uc.connectToAwx.Execute(&cfg); err != nil {
 		return err
 	}
 

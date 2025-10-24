@@ -9,18 +9,21 @@ type CustomTemplateUseCase struct {
 	prompter             ports.Prompter
 	awxconnector         ports.AwxConnector
 	monitorJobProcessing *services.MonitorJobProgress
+	connectToAwx         *services.ConnectToAwx
 }
 
-func NewCustomTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, monitorJobProcessing *services.MonitorJobProgress) *CustomTemplateUseCase {
+func NewCustomTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, monitorJobProcessing *services.MonitorJobProgress, connectToAwx *services.ConnectToAwx) *CustomTemplateUseCase {
 	return &CustomTemplateUseCase{
 		prompter:             prompter,
 		awxconnector:         awxconnector,
 		monitorJobProcessing: monitorJobProcessing,
+		connectToAwx:         connectToAwx,
 	}
 }
 
 func (uc *CustomTemplateUseCase) Execute() error {
-	if err := services.ConnectAwx(uc.awxconnector); err != nil {
+	var cfg ports.AwxConfig
+	if err := uc.connectToAwx.Execute(&cfg); err != nil {
 		return err
 	}
 

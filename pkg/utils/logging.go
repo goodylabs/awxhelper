@@ -7,7 +7,7 @@ import (
 )
 
 func OptionalLog(msg string) {
-	if config.IsVerboseMode() {
+	if config.IsDebugMode() {
 		log.Println(msg)
 	}
 }

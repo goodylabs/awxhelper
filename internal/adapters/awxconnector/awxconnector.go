@@ -40,7 +40,7 @@ func (a *awxconnector) verifyConnection() error {
 
 	var data any
 	if err := a.unmarshalResponseBody(respBody, &data); err != nil {
-		return fmt.Errorf("statusCode: %d, failed to unmarshal response: %w", statusCode, err)
+		return fmt.Errorf("statusCode: %d, failed to unmarshal response: %w, body %v", statusCode, err, respBody)
 	}
 
 	pretty, err := json.MarshalIndent(data, "", "  ")

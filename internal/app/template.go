@@ -9,18 +9,23 @@ type RunTemplateUseCase struct {
 	prompter             ports.Prompter
 	awxconnector         ports.AwxConnector
 	monitorJobProcessing *services.MonitorJobProgress
+	fileadapter          ports.FileAdapter
+	connectToAwx         *services.ConnectToAwx
 }
 
-func NewRunTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, monitorJobProcessing *services.MonitorJobProgress) *RunTemplateUseCase {
+func NewRunTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, monitorJobProcessing *services.MonitorJobProgress, fileadapter ports.FileAdapter, connectToAwx *services.ConnectToAwx) *RunTemplateUseCase {
 	return &RunTemplateUseCase{
 		prompter:             prompter,
 		awxconnector:         awxconnector,
 		monitorJobProcessing: monitorJobProcessing,
+		fileadapter:          fileadapter,
+		connectToAwx:         connectToAwx,
 	}
 }
 
 func (uc *RunTemplateUseCase) Execute(templatePrefix string) error {
-	if err := services.ConnectAwx(uc.awxconnector); err != nil {
+	var cfg ports.AwxConfig
+	if err := uc.connectToAwx.Execute(&cfg); err != nil {
 		return err
 	}
 

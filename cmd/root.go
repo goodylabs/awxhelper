@@ -13,15 +13,21 @@ var version = "dev"
 var rootCmd = &cobra.Command{
 	Use:   "awxhelper",
 	Short: "A brief description of your application",
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if debugMode, _ := cmd.Flags().GetBool("debug"); debugMode {
+			config.SetDebugMode(true)
+			fmt.Println("--> Debug mode enabled.")
+		}
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		if v, _ := cmd.Flags().GetBool("version"); v {
 			fmt.Println(version)
 			return
 		}
 
-		// if verboseMode, _ := cmd.Flags().GetBool("verbose"); verboseMode {
-		// 	config.SetVerboseMode(true)
-		// }
+		if debugMode, _ := cmd.Flags().GetBool("debug"); debugMode {
+			config.SetDebugMode(true)
+		}
 
 		cmd.Help()
 	},
@@ -47,5 +53,5 @@ func init() {
 
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.Flags().BoolP("version", "v", false, "Print version and exit")
-	// rootCmd.Flags().BoolP("verbose", "verbose", false, "Run in verbose mode")
+	rootCmd.PersistentFlags().BoolP("debug", "x", false, "Run in debug mode")
 }

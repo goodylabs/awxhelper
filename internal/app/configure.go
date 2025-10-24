@@ -1,8 +1,10 @@
 package app
 
 import (
+	"path/filepath"
+
 	"github.com/goodylabs/awxhelper/internal/ports"
-	"github.com/goodylabs/awxhelper/internal/services"
+	"github.com/goodylabs/awxhelper/pkg/config"
 )
 
 type ConfigureUseCase struct {
@@ -44,9 +46,9 @@ func (uc *ConfigureUseCase) Execute(opts *ConfigureOpts) error {
 		return err
 	}
 
-	configPath := services.GetConfigPath()
+	configPath := filepath.Join(config.GetAwxhelperDir(), "awxhelper-config.json")
 
-	if err := uc.fileadapter.ReadJSONFile(configPath, cfg); err != nil {
+	if err := uc.fileadapter.WriteJSONFile(configPath, cfg); err != nil {
 		return err
 	}
 

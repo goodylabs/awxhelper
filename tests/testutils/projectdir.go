@@ -28,3 +28,8 @@ func GetAwxHelperEventsDir() string {
 	projectDir := GetProjectDir()
 	return filepath.Join(projectDir, "tests", "mocks", "awxconnector", "events")
 }
+
+func GetTestingDir() string {
+	projectDir := GetProjectDir()
+	return filepath.Join(projectDir, ".testing")
+}

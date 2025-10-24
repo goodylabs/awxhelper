@@ -3,12 +3,12 @@ package app
 import (
 	"github.com/goodylabs/awxhelper/internal/ports"
 	"github.com/goodylabs/awxhelper/internal/services"
-	"github.com/goodylabs/awxhelper/pkg/utils"
 )
 
 type ConfigureUseCase struct {
 	prompter     ports.Prompter
 	awxconnector ports.AwxConnector
+	fileadapter  ports.FileAdapter
 }
 
 type ConfigureOpts struct {
@@ -17,10 +17,11 @@ type ConfigureOpts struct {
 	Password string
 }
 
-func NewConfigureUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector) *ConfigureUseCase {
+func NewConfigureUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, fileadapter ports.FileAdapter) *ConfigureUseCase {
 	uc := new(ConfigureUseCase)
 	uc.prompter = prompter
 	uc.awxconnector = awxconnector
+	uc.fileadapter = fileadapter
 	return uc
 }
 
@@ -45,7 +46,11 @@ func (uc *ConfigureUseCase) Execute(opts *ConfigureOpts) error {
 
 	configPath := services.GetConfigPath()
 
-	return utils.WriteJSON(configPath, cfg)
+	if err := uc.fileadapter.ReadJSONFile(configPath, cfg); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (uc *ConfigureUseCase) getOrPrompt(value, prompt string) (string, error) {

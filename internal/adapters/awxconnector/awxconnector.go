@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/goodylabs/awxhelper/internal/domain/entities"
 	"github.com/goodylabs/awxhelper/internal/ports"
 	"github.com/goodylabs/awxhelper/pkg/config"
 )
@@ -90,7 +91,7 @@ func (a *awxconnector) ListJobTemplates(prefix string) ([]ports.PrompterItem, er
 	return jobTemplates, nil
 }
 
-func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int, error) {
+func (a *awxconnector) LaunchJob(templateId string, extraVars *entities.ExtraVars) (int, error) {
 	templateIdInt, err := strconv.Atoi(templateId)
 	if err != nil {
 		return 0, fmt.Errorf("invalid template id: %w", err)
@@ -99,7 +100,8 @@ func (a *awxconnector) LaunchJob(templateId string, params map[string]any) (int,
 	url := fmt.Sprintf("/api/v2/job_templates/%d/launch/", templateIdInt)
 
 	launchBody := map[string]any{
-		"inventory": config.INVENTORY_ID,
+		"inventory":  config.INVENTORY_ID,
+		"extra_vars": extraVars,
 	}
 
 	respBody, statusCode, err := a.httpconnector.DoPost(a.httpCfg, url, launchBody)

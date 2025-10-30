@@ -3,6 +3,7 @@ package mocks
 import (
 	"log"
 
+	"github.com/goodylabs/awxhelper/internal/domain/entities"
 	"github.com/goodylabs/awxhelper/internal/ports"
 	"github.com/goodylabs/awxhelper/pkg/utils"
 )
@@ -19,7 +20,7 @@ func (m *MockAwxConnector) ListJobTemplates(prefix string) ([]ports.PrompterItem
 	return []ports.PrompterItem{}, nil
 }
 
-func (m *MockAwxConnector) LaunchJob(templateId string, params map[string]any) (int, error) {
+func (m *MockAwxConnector) LaunchJob(templateId string, extraVars *entities.ExtraVars) (int, error) {
 	return 0, nil
 }
 

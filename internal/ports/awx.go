@@ -1,9 +1,11 @@
 package ports
 
+import "github.com/goodylabs/awxhelper/internal/domain/entities"
+
 type AwxConnector interface {
 	ConfigureConnection(cfg *AwxConfig) error
 	ListJobTemplates(prefix string) ([]PrompterItem, error)
-	LaunchJob(templateId string, params map[string]any) (int, error)
+	LaunchJob(templateId string, extraVars *entities.ExtraVars) (int, error)
 	GetJobEvents(jobId int) ([]Event, error)
 }
 

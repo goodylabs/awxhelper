@@ -42,7 +42,7 @@ func (uc *CustomTemplateUseCase) Execute() error {
 		return nil
 	}
 
-	jobId, err := uc.awxconnector.LaunchJob(template.Value, map[string]any{})
+	jobId, err := uc.awxconnector.LaunchJob(template.Value, nil)
 	if err != nil {
 		return err
 	}

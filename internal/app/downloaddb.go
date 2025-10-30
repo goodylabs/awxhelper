@@ -3,11 +3,12 @@ package app
 import (
 	"fmt"
 
+	"github.com/goodylabs/awxhelper/internal/domain/entities"
 	"github.com/goodylabs/awxhelper/internal/ports"
 	"github.com/goodylabs/awxhelper/internal/services"
 )
 
-type RunDownloadDB struct {
+type DownloadDB struct {
 	prompter             ports.Prompter
 	awxconnector         ports.AwxConnector
 	monitorJobProcessing *services.MonitorJobProgress
@@ -21,8 +22,8 @@ func NewDownloadDB(
 	monitorJobProcessing *services.MonitorJobProgress,
 	getEndingInstruction *services.GetEndingInstruction,
 	connectToAwx *services.ConnectToAwx,
-) *RunDownloadDB {
-	return &RunDownloadDB{
+) *DownloadDB {
+	return &DownloadDB{
 		prompter:             prompter,
 		awxconnector:         awxconnector,
 		monitorJobProcessing: monitorJobProcessing,
@@ -31,7 +32,7 @@ func NewDownloadDB(
 	}
 }
 
-func (uc *RunDownloadDB) Execute(templatePrefix string) error {
+func (uc *DownloadDB) Execute(templatePrefix string, extraVars *entities.ExtraVars) error {
 	var cfg ports.AwxConfig
 	if err := uc.connectToAwx.Execute(&cfg); err != nil {
 		return err
@@ -47,7 +48,7 @@ func (uc *RunDownloadDB) Execute(templatePrefix string) error {
 		return nil
 	}
 
-	jobId, err := uc.awxconnector.LaunchJob(template.Value, map[string]any{})
+	jobId, err := uc.awxconnector.LaunchJob(template.Value, extraVars)
 	if err != nil {
 		return err
 	}

@@ -13,6 +13,8 @@ mkdir -p $APP_DIR
 echo "Creating directory: $APP_BIN_DIR"
 mkdir -p $APP_BIN_DIR
 
+touch "${APP_DIR}/${APP}-config.json"
+
 os_type=$(uname -s | tr '[:upper:]' '[:lower:]')
 arch=$(uname -m)
 

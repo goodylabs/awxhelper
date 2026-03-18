@@ -12,6 +12,9 @@ source $rc_file
 
 # Download and install binary
 curl -s "https://raw.githubusercontent.com/goodylabs/${APP}/refs/heads/main/scripts/download_scripts.sh" | bash -s
+
+# Check AWXHelper version
+awxhelper --version
 ```
 
 # Configuration

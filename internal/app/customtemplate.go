@@ -5,15 +5,15 @@ import (
 	"github.com/goodylabs/awxhelper/internal/services"
 )
 
-type CustomTemplateUseCase struct {
+type RunJobUseCase struct {
 	prompter             ports.Prompter
 	awxconnector         ports.AwxConnector
 	monitorJobProcessing *services.MonitorJobProgress
 	connectToAwx         *services.ConnectToAwx
 }
 
-func NewCustomTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, monitorJobProcessing *services.MonitorJobProgress, connectToAwx *services.ConnectToAwx) *CustomTemplateUseCase {
-	return &CustomTemplateUseCase{
+func NewRunJobUseCase(prompter ports.Prompter, awxconnector ports.AwxConnector, monitorJobProcessing *services.MonitorJobProgress, connectToAwx *services.ConnectToAwx) *RunJobUseCase {
+	return &RunJobUseCase{
 		prompter:             prompter,
 		awxconnector:         awxconnector,
 		monitorJobProcessing: monitorJobProcessing,
@@ -21,18 +21,13 @@ func NewCustomTemplateUseCase(prompter ports.Prompter, awxconnector ports.AwxCon
 	}
 }
 
-func (uc *CustomTemplateUseCase) Execute() error {
+func (uc *RunJobUseCase) Execute() error {
 	var cfg ports.AwxConfig
 	if err := uc.connectToAwx.Execute(&cfg); err != nil {
 		return err
 	}
 
-	phrase, err := uc.prompter.PromptForString("Filter template name by phrase")
-	if err != nil {
-		return err
-	}
-
-	templates, err := uc.awxconnector.ListJobTemplates(phrase)
+	templates, err := uc.awxconnector.ListJobTemplates("")
 	if err != nil {
 		return err
 	}

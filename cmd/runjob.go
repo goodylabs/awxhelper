@@ -11,12 +11,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var customtemplateCmd = &cobra.Command{
-	Use:   "customtemplate",
-	Short: "Run custom template command",
+var runJobCmd = &cobra.Command{
+	Use:   "runjob",
+	Short: "Run any job you want!",
 	Run: func(cmd *cobra.Command, args []string) {
-		err := di.CreateContainer().Invoke(func(us *app.CustomTemplateUseCase) error {
-			return us.Execute()
+		container := di.CreateContainer()
+		err := container.Invoke(func(us *app.RunTemplateUseCase) error {
+			return us.Execute("")
 		})
 		if err != nil {
 			fmt.Println(err)
@@ -25,6 +26,5 @@ var customtemplateCmd = &cobra.Command{
 }
 
 func init() {
-	customtemplateCmd.Hidden = true
-	rootCmd.AddCommand(customtemplateCmd)
+	rootCmd.AddCommand(runJobCmd)
 }

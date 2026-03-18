@@ -99,9 +99,16 @@ func (a *awxconnector) LaunchJob(templateId string, extraVars *entities.ExtraVar
 
 	url := fmt.Sprintf("/api/v2/job_templates/%d/launch/", templateIdInt)
 
+	extraVarsValue := map[string]any{}
+	if extraVars != nil {
+		for k, v := range *extraVars {
+			extraVarsValue[k] = v
+		}
+	}
+
 	launchBody := map[string]any{
 		"inventory":  config.INVENTORY_ID,
-		"extra_vars": extraVars,
+		"extra_vars": extraVarsValue,
 	}
 
 	respBody, statusCode, err := a.httpconnector.DoPost(a.httpCfg, url, launchBody)

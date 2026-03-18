@@ -13,7 +13,7 @@ import (
 
 var configureCmd = &cobra.Command{
 	Use:   "configure",
-	Short: "Configure your AWX connection",
+	Short: "Configure connection to your AWX (url, username, password)",
 	Run: func(cmd *cobra.Command, args []string) {
 		url, _ := cmd.Flags().GetString("url")
 		username, _ := cmd.Flags().GetString("username")

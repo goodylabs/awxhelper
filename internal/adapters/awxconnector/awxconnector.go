@@ -16,6 +16,7 @@ type awxconnector struct {
 }
 
 type listJobTemplatesResponse struct {
+	Next    string `json:"next"`
 	Results []struct {
 		ID           int    `json:"id"`
 		Name         string `json:"name"`
@@ -66,31 +67,35 @@ func (a *awxconnector) ConfigureConnection(cfg *ports.AwxConfig) error {
 }
 
 func (a *awxconnector) ListJobTemplates(prefix string) ([]ports.PrompterItem, error) {
-	url := fmt.Sprintf("/api/v2/job_templates/?name__icontains=%s", prefix)
-	respBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, url)
-	if err != nil {
-		return nil, err
-	}
-	if statusCode != 200 {
-		return nil, fmt.Errorf("failed to list job templates, status %d", statusCode)
-	}
-
-	var response listJobTemplatesResponse
-	if err := a.unmarshalResponseBody(respBody, &response); err != nil {
-		return nil, err
-	}
-
 	var jobTemplates []ports.PrompterItem
-	for _, r := range response.Results {
-		jobTemplates = append(jobTemplates, ports.PrompterItem{
-			Label: r.Name,
-			Value: strconv.Itoa(r.ID),
-		})
+	nextURL := fmt.Sprintf("/api/v2/job_templates/?name__icontains=%s&page_size=100", prefix)
+
+	for nextURL != "" {
+		respBody, statusCode, err := a.httpconnector.DoGet(a.httpCfg, nextURL)
+		if err != nil {
+			return nil, err
+		}
+		if statusCode != 200 {
+			return nil, fmt.Errorf("failed to list job templates, status %d", statusCode)
+		}
+
+		var response listJobTemplatesResponse
+		if err := a.unmarshalResponseBody(respBody, &response); err != nil {
+			return nil, err
+		}
+
+		for _, r := range response.Results {
+			jobTemplates = append(jobTemplates, ports.PrompterItem{
+				Label: r.Name,
+				Value: strconv.Itoa(r.ID),
+			})
+		}
+
+		nextURL = response.Next
 	}
 
 	return jobTemplates, nil
 }
-
 func (a *awxconnector) LaunchJob(templateId string, extraVars *entities.ExtraVars) (int, error) {
 	templateIdInt, err := strconv.Atoi(templateId)
 	if err != nil {

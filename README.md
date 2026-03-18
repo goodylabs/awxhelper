@@ -26,7 +26,19 @@ awxhelper configure
 # Available Commands
 
 ```bash
-configure     Configure your AWX connection
-downloaddb    Download database dump
-forceupdate   Force check for new updates and install if available
+Usage:
+  awxhelper [flags]
+  awxhelper [command]
+
+Available Commands:
+  configure   Configure connection to your AWX (url, username, password)
+  downloaddb  Download database backup to your local /tmp dir
+  help        Help about any command
+  runbackup   Run job that makes a database backup
+  runjob      Run any job you want!
+
+Flags:
+  -x, --debug     Run in debug mode
+  -h, --help      help for awxhelper
+  -v, --version   Print version and exit
 ```
